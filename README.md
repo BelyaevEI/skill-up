@@ -121,3 +121,85 @@ func main() {
 }
 ```
 
+Bird остается базовым классом для всех птиц, обеспечивая общее поведение (например, издавать звук). Создается интерфейс FlyingBird для птиц, которые могут летать. Sparrow реализует интерфейс FlyingBird, так как воробьи умеют летать. Penguin является подтипом Bird, но не реализует интерфейс FlyingBird, поскольку пингвины не летают.
+
+4. Interface segregation principle (Принцип разделения интерфейса)(ISP).
+
+Данный принцип говорит о том, что пользователи не должны быть вынуждены зависеть от интерфейсов, которые они не используют. Это означает, что вместо одного наполненного интерфейса лучше иметь несколько тонких и специализированных:
+
+```Golang
+package main
+
+type Printer interface {
+    Print(document string)
+}
+
+type Scanner interface {
+    Scan(document string)
+}
+
+// MultiFunctionDevice наследует от обоих интерфейсов
+type MultiFunctionDevice interface {
+    Printer
+    Scanner
+}
+
+// класс, реализующий только функцию печати
+type SimplePrinter struct {}
+
+func (p *SimplePrinter) Print(document string) {
+    // реализация печати
+}
+
+// класс, реализующий обе функции
+type AdvancedPrinter struct {}
+
+func (p *AdvancedPrinter) Print(document string) {
+}
+
+func (p *AdvancedPrinter) Scan(document string) {
+}
+```
+
+Не заставляем SimplePrinter реализовывать функции сканирования, которые он не использует, соблюдая ISP.
+
+5. Dependency inversion principle (Принцип инверсии зависимостей)(DIP).
+
+Данный принцип гласит, что высокоуровневые модули не должны зависеть от низкоуровневых модулей. Оба типа модулей должны зависеть от абстракций:
+
+```Golang
+
+package main
+
+import "fmt"
+
+// Интерфейс для абстракции хранения данных
+type DataStorage interface {
+    Save(data string)
+}
+
+// Низкоуровневый модуль для хранения данных в файле
+type FileStorage struct {}
+
+func (fs *FileStorage) Save(data string) {
+    fmt.Println("Сохранение данных в файл:", data)
+}
+
+// Высокоуровневый модуль, не зависит напрямую от FileStorage
+type DataManager struct {
+    storage DataStorage // зависит от абстракции
+}
+
+func (dm *DataManager) SaveData(data string) {
+    dm.storage.Save(data) // делегирование сохранения
+}
+
+func main() {
+    fs := &FileStorage{}
+    dm := DataManager{storage: fs}
+    dm.SaveData("Тестовые данные")
+}
+```
+
+DataManager не зависит напрямую от FileStorage. Вместо этого он использует интерфейс DataStorage, что позволяет легко заменить способ хранения данных без изменения DataManager.
+
