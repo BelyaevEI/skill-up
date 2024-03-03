@@ -46,3 +46,78 @@ func AnimalSounds() {
 	}
 }
 ```
+3. Liskov substitution principle (принцип подстановки Барбары Лисков)(LSP).
+   
+Объекты в программе должны быть заменяемыми на экземпляры их подтипов без изменения правильности работы программы. Если у вас есть класс-родитель и класс-потомок, то любой код, который использует родительский класс, должен работать так же хорошо и с объектами дочернего класса.
+
+Рассмотрим пример, который нарушает принцип LSP:
+
+```Golang
+package main
+
+import "fmt"
+
+// Bird базовый тип
+type Bird struct {}
+
+func (b *Bird) Fly() {
+    fmt.Println("Птица летит")
+}
+
+// Penguin - подтип Bird, но не может летать
+type Penguin struct {
+    Bird
+}
+
+func main() {
+    var bird = &Bird{}
+    bird.Fly()
+
+    var penguin = &Penguin{}
+    penguin.Fly() // Нарушение LSP, т.к. пингвины не летают
+}
+
+```
+
+Penguin наследуется от Bird, но не соответствует поведению, ожидаемому от Bird, что нарушает LSP. В данном случае, так как пингвины не умеют летать, нам следует отделить способность летать от базового класса Bird:
+
+```Golang
+package main
+
+import "fmt"
+
+// Bird базовый тип
+type Bird struct {}
+
+func (b *Bird) MakeSound() {
+    fmt.Println("Птица издает звук")
+}
+
+// FlyingBird интерфейс для летающих птиц
+type FlyingBird interface {
+    Fly()
+}
+
+// Sparrow подтип Bird, который умеет летать
+type Sparrow struct {
+    Bird
+}
+
+func (s *Sparrow) Fly() {
+    fmt.Println("Воробей летит")
+}
+
+// Penguin подтип Bird, но не реализует интерфейс FlyingBird
+type Penguin struct {
+    Bird
+}
+
+func main() {
+    var sparrow FlyingBird = &Sparrow{}
+    sparrow.Fly()
+
+    var penguin = &Penguin{}
+    penguin.MakeSound() // Penguin может издавать звук, но не летать
+}
+```
+
