@@ -1,5 +1,7 @@
-# Оглавление
+# Оглавление:
 
-* [SOLID](#SOLID)
+[1.SOLID](#SOLID)
 
-## SOLID
+## 1. SOLID
+
+
