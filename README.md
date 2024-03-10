@@ -204,4 +204,4 @@ func main() {
 
 DataManager не зависит напрямую от FileStorage. Вместо этого он использует интерфейс DataStorage, что позволяет легко заменить способ хранения данных без изменения DataManager.
 
-##Conccurency
+## Conccurency
