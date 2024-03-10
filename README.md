@@ -1,6 +1,7 @@
 # Оглавление:
 
 * [SOLID в Golang](#SOLID-в-Golang)
+* [Conccurency](#Conccurecy)
 
 ## SOLID в Golang
 SOLID - это сокращенная аббревиатура от 5 принципов начинающихся на каждую букву из SOLID.
@@ -203,3 +204,4 @@ func main() {
 
 DataManager не зависит напрямую от FileStorage. Вместо этого он использует интерфейс DataStorage, что позволяет легко заменить способ хранения данных без изменения DataManager.
 
+##Conccurency
